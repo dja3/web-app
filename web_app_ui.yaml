@@ -1,0 +1,47 @@
+apiVersion: v1
+kind: Service
+metadata:
+    name: web-app-ui
+    namespace: web-app
+    labels:
+        run: web-app
+        tier: web-app-ui
+spec:
+    type: LoadBalancer
+    ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 3000
+    selector:
+        run: web-app
+        tier: web-app-ui
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: web-app-ui
+    namespace: web-app
+spec:
+    selector:
+        matchLabels:
+            run: web-app
+            tier: web-app-ui
+    replicas: 1
+    template:
+        metadata:
+            labels:
+                run: web-app
+                tier: web-app-ui
+        spec:
+            containers: 
+            - name: web-app-api
+              image: gcr.io/web-server-app-demo/web_app_ui:0.1
+              imagePullPolicy: Always
+              env:
+                  - name: REACT_APP_APP_SERVER
+                    value: "web-app-api"
+                  - name: REACT_APP_APP_SERVER_PORT
+                    value: "80"
+              ports:
+              - containerPort: 3000
+
