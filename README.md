@@ -56,7 +56,7 @@ ui_1   | To ignore, add // eslint-disable-next-line to the line before.
 ui_1   | 
 ```
 
-The backend API is available on `http://localhost:80` and the UI is available on `http://localhost:3000`. For details on API usage see [web-api.md](web-api.md).
+The backend API is available on `http://localhost:80` and the UI is available on `http://localhost:3000`. For details on API usage see [web-app-api.md](web-app-api.md).
 
 ## Deploy on Kubernetes ##
 
