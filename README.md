@@ -59,25 +59,23 @@ ui_1   |
 The backend API is available on `http://localhost:80` and the UI is available on `http://localhost:3000`. For details on API usage see [web-api.md](web-api.md).
 
 ## Deploy on Kubernetes ##
-In the root of the repository are two `yaml` configs, `web_app_api.yaml` and `web_app_ui.yaml`. 
 
-[`web_app_api.yaml`](web_app_api.yaml)  
+**Background detail**  
+In the root of the repository are two `yaml` config files, `web_app_api.yaml` and `web_app_ui.yaml`. 
 
-This creates the following three Kubernetes objects for the backend API: [Service](https://kubernetes.io/docs/concepts/services-networking/service/), [Secret](https://kubernetes.io/docs/concepts/configuration/secret/) and [Deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/).
+[`web_app_api.yaml`](web_app_api.yaml) creates the following three Kubernetes objects for the backend API: [Service](https://kubernetes.io/docs/concepts/services-networking/service/), [Secret](https://kubernetes.io/docs/concepts/configuration/secret/) and [Deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/).
 
-***Service*** - The backend API service is a `ClusterIP` ServiceType so it the service is only reachable from with the Kubernetes cluster to be accessed by the UI. It is connected to the backend API deployment through the `tier: web-app-api` Selector.
+*Service* - The backend API service is a `ClusterIP` ServiceType so it the service is only reachable from with the Kubernetes cluster to be accessed by the UI. It is connected to the backend API deployment through the `tier: web-app-api` Selector.
 
-***Secret*** - The secret is used to pass your MongoDB connection string (containing credentials) into the pod rather than hard-coding a connection.
+*Secret* - The secret is used to pass your MongoDB connection string (containing credentials) into the pod rather than hard-coding a connection.
 
-***Deployment*** - The deployment for the backend API defines the number of replicas as well as the pod configuration.
+*Deployment* - The deployment for the backend API defines the number of replicas as well as the pod configuration.
 
-[`web_app_ui.yaml`](web_app_ui.yaml) 
+[`web_app_ui.yaml`](web_app_ui.yaml) creates the following two Kubernetes objects for the frontend UI: [Service](https://kubernetes.io/docs/concepts/services-networking/service/) and [Deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/).
 
-This creates the following two Kubernetes objects for the frontend UI: [Service](https://kubernetes.io/docs/concepts/services-networking/service/) and [Deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/).
+*Service* - The backend API service is a `LoadBalancer` ServiceType to expose it outside the Kubernetes cluster. It is connected to the frontent UI deployment through the `tier: web-app-ui` Selector. You can also use `NodePort` ServiceType to expose outside if a `LoadBalancer` isn't configured. All public cloud provider's Kuberenetes services have `LoadBalancer` configured and it's an easy way to get a stable Public IP address assigned.
 
-***Service*** - The backend API service is a `LoadBalancer` ServiceType to expose it outside the Kubernetes cluster. It is connected to the frontent UI deployment through the `tier: web-app-ui` Selector. You can also use `NodePort` ServiceType to expose outside if a `LoadBalancer` isn't configured. All public cloud provider's Kuberenetes services have `LoadBalancer` configured and it's an easy way to get a stable Public IP address assigned.
-
-***Deployment*** - The deployment for the frontend defines the number of replicas as well as the pod configuration. The frontend UI makes calls to the backend API via the backend service.
+*Deployment* - The deployment for the frontend defines the number of replicas as well as the pod configuration. The frontend UI makes calls to the backend API via the backend service.
 
 **Add your MongoDB connection string to `web_app_api.yaml`**  
 
@@ -105,7 +103,7 @@ service/web-app-ui created
 deployment.apps/web-app-ui created
 ```
 
-Depending on your cloud provider it will take a few minutes for the `EXTERNAL-IP` to be assigned. Once it's been assigned you'll be able to access the UI on http://EXTERNAL-IP:80. 
+Depending on your cloud provider it will take a few minutes for the `EXTERNAL-IP` to be assigned to the `web-app-ui` service. Once it's been assigned you'll be able to access the UI on port 80 of the `EXTERNAL-IP`. 
 
 ```bash
 $ kubectl get services -n web-app
