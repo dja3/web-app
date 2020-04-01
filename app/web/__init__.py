@@ -1,5 +1,6 @@
 #! /usr/bin/python
 
+import logging
 import decimal
 from bson.decimal128 import Decimal128
 from bson import ObjectId
@@ -28,9 +29,14 @@ def create_app():
     from app.web.rest.idea import idea_v1_blueprint
 
     # register bluebrints
+    logging.info("registering api endpoint blueprints")
     web_app.register_blueprint(status_v1_blueprint, url_prefix='/api/v1')
+    logging.debug("registered blueprint: status_v1_blueprint")
     web_app.register_blueprint(session_v1_blueprint, url_prefix='/api/v1')
-    web_app.register_blueprint(airbnb_v1_blueprint, url_prefix='/api/v1')
+    logging.debug("registered blueprint: session_v1_blueprint")
+    #web_app.register_blueprint(airbnb_v1_blueprint, url_prefix='/api/v1')
+    #logging.debug("registered blueprint: airbnb_v1_blueprint")
     web_app.register_blueprint(idea_v1_blueprint, url_prefix='/api/v1')
+    logging.debug("registered blueprint: idea_v1_blueprint")
 
     return web_app

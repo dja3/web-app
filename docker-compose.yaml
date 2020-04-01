@@ -6,6 +6,8 @@ services:
             - "80:80"
         volumes:
             - "$PWD/for_devs/dev_mongo_config:/mongo"
+        environment:
+            - APP_DEBUG=True
     ui:
         build: web/web-app
         ports:

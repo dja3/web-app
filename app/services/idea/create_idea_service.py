@@ -8,6 +8,7 @@ def createIdea(idea_list):
 
     try:
         _id_list = utils.my_idea_insert_many(idea_list)
+        logging.debug("_id_list: {}".format( _id_list))
 
         body = {
                  "create_idea_id_list" : _id_list,

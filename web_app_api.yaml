@@ -48,11 +48,11 @@ spec:
               imagePullPolicy: Always
               readinessProbe:
                   httpGet:
-                      path: /api/v1/status/
+                      path: /api/v1/status
                       port: 80
               livenessProbe:
                   httpGet:
-                      path: /api/v1/status/
+                      path: /api/v1/status
                       port: 80
               env:
                   - name: APP_DEBUG

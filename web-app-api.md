@@ -20,6 +20,8 @@ Returns `idea_count`, the number of ideas in the database, and `idea`, a list of
 **Request body format:**
 N/A
 
+**Response code:** 200 on success, 404 if no values exist
+
 **Response body format:**
 ```json
 {
@@ -64,6 +66,8 @@ Returns a single `idea` which matches the supplied ObjectId, `_id`, in database 
 **Request body format:**
 N/A
 
+**Response code**: 200 on success, 404 if `ObjectId` doesn't existing in collection.
+
 **Response body format:**
 ```json
 {
@@ -98,6 +102,8 @@ Creates a N idea entries in the database. `idea_list` must be a list even if it 
                 }]
 }
 ```
+
+**Response code:** 200 on success, failure TBD
 
 **Response body format:**  
 TODO
