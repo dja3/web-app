@@ -8,22 +8,22 @@ My friend Austin has a lot of great ideas that could make him a billionaire. Unf
 * Tool for sending HTTP requests (i.e. [Postman](https://www.getpostman.com/) or [Curl](https://curl.haxx.se/))
  
 ## Setup a development instance ##
-**Clone git repo**
+**Clone git repo**  
 ```bash
 $ git clone https://github.com/dja3/web-app.git
 ```
 
-**Create MongoDB Database and collection**
+**Create MongoDB Database and collection**  
 You need to have a database named `idea` and a collecion named `oneBIdeas` configured in your MongoDB instance. Will hopefully get this initialization added to the application later.
 
-**Add Mongo connection string**
+**Add Mongo connection string**  
 Add your own MongoDB connection string to a file named `connection` under `for_devs/dev_mongo_config/` directory. File should look something like this:
 ```bash
 mongodb+srv://<username>:<password>@cluster0.gcp.mongodb.net/test?retryWrites=true&w=majority
 ```
 
-**Deploy with  Docker-Compose**
-To start the API server and the UI containers locally, from the root of the repo run:
+**Deploy with  Docker-Compose**  
+To start the API server and the UI containers locally (for dev work), from the root of the repo run:
 ```bash
 $ docker-compose up
 Starting webapp_api_1
@@ -55,13 +55,13 @@ ui_1   | Search for the keywords to learn more about each warning.
 ui_1   | To ignore, add // eslint-disable-next-line to the line before.
 ui_1   | 
 ```
-P
+
 The backend API is available on `http://localhost:80` and the UI is available on `http://localhost:3000`.
 
-**Deploy on Kubernetes**
+**Deploy on Kubernetes**  
 In the root of the repository are two `yaml` configs, `web_app_api.yaml` and `web_app_ui.yaml`. 
 
-`web_app_api.yaml` 
+`web_app_api.yaml`  
 
 This creates the following three Kubernetes objects for the backend API: [Service](https://kubernetes.io/docs/concepts/services-networking/service/), [Secret](https://kubernetes.io/docs/concepts/configuration/secret/) and [Deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/).
 
@@ -71,7 +71,7 @@ This creates the following three Kubernetes objects for the backend API: [Servic
 
 *Deployment* - The deployment for the backend API defines the number of replicas as well as the pod configuration.
 
-`web_app_ui.yaml`
+`web_app_ui.yaml`  
 
 This creates the following two Kubernetes objects for the frontend UI: [Service](https://kubernetes.io/docs/concepts/services-networking/service/) and [Deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/).
 
