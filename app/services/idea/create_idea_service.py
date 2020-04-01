@@ -1,5 +1,6 @@
 #! /usr/bin/python
 
+import logging
 import datetime
 from bson import ObjectId
 from app.services import utils
