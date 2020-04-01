@@ -34,7 +34,7 @@ spec:
                 tier: web-app-ui
         spec:
             containers: 
-            - name: web-app-api
+            - name: web-app-ui
               image: gcr.io/web-server-app-demo/web_app_ui:0.1
               imagePullPolicy: Always
               env:

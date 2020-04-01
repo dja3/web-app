@@ -17,13 +17,13 @@ $ git clone https://github.com/dja3/web-app.git
 You need to have a database named `idea` and a collecion named `oneBIdeas` configured in your MongoDB instance. Will hopefully get this initialization added to the application later.
 
 **Add Mongo connection string**  
-Add your own MongoDB connection string to a file named `connection` under `for_devs/dev_mongo_config/` directory. File should look something like this:
+Add your own MongoDB connection string in plain text to a file named `connection` under `for_devs/dev_mongo_config/` directory. File should look something like this:
 ```bash
 mongodb+srv://<username>:<password>@cluster0.gcp.mongodb.net/test?retryWrites=true&w=majority
 ```
 
 **Deploy with  Docker-Compose**  
-To start the API server and the UI containers locally (for dev work), from the root of the repo run:
+To start the API server and the UI containers locally (for dev work), from the root of the repo run `docker-compose up`:
 ```bash
 $ docker-compose up
 Starting webapp_api_1
@@ -56,25 +56,60 @@ ui_1   | To ignore, add // eslint-disable-next-line to the line before.
 ui_1   | 
 ```
 
-The backend API is available on `http://localhost:80` and the UI is available on `http://localhost:3000`.
+The backend API is available on `http://localhost:80` and the UI is available on `http://localhost:3000`. For details on API usage see [web-api.md](web-api.md).
 
-**Deploy on Kubernetes**  
+## Deploy on Kubernetes ##
 In the root of the repository are two `yaml` configs, `web_app_api.yaml` and `web_app_ui.yaml`. 
 
-`web_app_api.yaml`  
+[`web_app_api.yaml`](web_app_api.yaml)  
 
 This creates the following three Kubernetes objects for the backend API: [Service](https://kubernetes.io/docs/concepts/services-networking/service/), [Secret](https://kubernetes.io/docs/concepts/configuration/secret/) and [Deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/).
 
-*Service* - The backend API service is a `ClusterIP` ServiceType so it the service is only reachable from with the Kubernetes cluster to be accessed by the UI. It is connected to the backend API deployment through the `tier: web-app-api` Selector.
+***Service*** - The backend API service is a `ClusterIP` ServiceType so it the service is only reachable from with the Kubernetes cluster to be accessed by the UI. It is connected to the backend API deployment through the `tier: web-app-api` Selector.
 
-*Secret* - The secret is used to pass your MongoDB connection string (containing credentials) into the pod rather than hard-coding a connection.
+***Secret*** - The secret is used to pass your MongoDB connection string (containing credentials) into the pod rather than hard-coding a connection.
 
-*Deployment* - The deployment for the backend API defines the number of replicas as well as the pod configuration.
+***Deployment*** - The deployment for the backend API defines the number of replicas as well as the pod configuration.
 
-`web_app_ui.yaml`  
+[`web_app_ui.yaml`] (web_app_api.yaml) 
 
 This creates the following two Kubernetes objects for the frontend UI: [Service](https://kubernetes.io/docs/concepts/services-networking/service/) and [Deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/).
 
-*Service* - The backend API service is a `LoadBalancer` ServiceType to expose it outside the Kubernetes cluster. It is connected to the frontent UI deployment through the `tier: web-app-ui` Selector. You can also use `NodePort` ServiceType to expose outside if a `LoadBalancer` isn't configured. All public cloud provider's Kuberenetes services have `LoadBalancer` configured and it's an easy way to get a stable Public IP address assigned.
+***Service*** - The backend API service is a `LoadBalancer` ServiceType to expose it outside the Kubernetes cluster. It is connected to the frontent UI deployment through the `tier: web-app-ui` Selector. You can also use `NodePort` ServiceType to expose outside if a `LoadBalancer` isn't configured. All public cloud provider's Kuberenetes services have `LoadBalancer` configured and it's an easy way to get a stable Public IP address assigned.
 
-*Deployment* - The deployment for the frontend defines the number of replicas as well as the pod configuration. The frontend UI makes calls to the backend API via the backend service.
+***Deployment*** - The deployment for the frontend defines the number of replicas as well as the pod configuration. The frontend UI makes calls to the backend API via the backend service.
+
+**Add your MongoDB connection string to `web_app_api.yaml`**  
+
+This string contains the credentials for connecting to your MongoDB instance and and must be base64 encoded. Below command will encode your string on Linux.
+```bash
+$ echo -n <your_connection_string> | base64
+```
+
+**Create a web-app namespace**  
+All the kubernetes objects will be deployed in a namespace called `web-app` to keep the resources separate from other things running on the cluster. So this namespace needs to be created first.
+```bash
+$ kubectl create namespace web-app
+```
+
+**Deploy all the objects from yaml**
+Apply the two yaml files with `kubectl` and make sure all pods start successfully.
+
+```bash
+$ kubectl apply -f web_app_api.yaml 
+service/web-app-api created
+secret/mongo-secret created
+deployment.apps/web-app-api created
+$ kubectl apply -f web_app_ui.yaml 
+service/web-app-ui created
+deployment.apps/web-app-ui created
+```
+
+Depending on your cloud provider it will take a few minutes for the `EXTERNAL-IP` to be assigned. Once it's been assigned you'll be able to hit the UI on http://<EXTERNAL-IP>:80. 
+
+```bash
+$ kubectl get services -n web-app
+NAME          TYPE           CLUSTER-IP     EXTERNAL-IP    PORT(S)        AGE
+web-app-api   ClusterIP      10.56.15.251   <none>         80/TCP         15m
+web-app-ui    LoadBalancer   10.56.9.80     34.72.175.30   80:31665/TCP   4d5h
+```
