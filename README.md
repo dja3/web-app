@@ -2,8 +2,8 @@
 My friend Austin has a lot of great ideas that could make him a billionaire. Unfortunately, he's usually a few decades late. This is a web app which includes CRUD operations for keeping a list of "$B Ideas" with front end in [React](reactjs.org), backend API built with Python [Flask](https://www.fullstackpython.com/flask.html) and [MongoDB](www.mongodb.com). This is an exercise for me to learn some new technologies and show the value of deploying them on Kubernetes.
 
 ## Prerequisites ##
-* MongoDB instance configured ([MongoDB Atlas](mongodb.com/cloud/atlas) is an easy way to get started!) with connection string
-* docker and docker-compose installed (for dev envirnment)
+* MongoDB instance configured ([MongoDB Atlas](mongodb.com/cloud/atlas) is an easy way to get started) with connection string
+* docker and docker-compose installed (for dev environment)
 * Kubernetes cluster configured with a `web-app` namespace
 * Tool for sending HTTP requests (i.e. [Postman](https://www.getpostman.com/) or [Curl](https://curl.haxx.se/))
  
@@ -71,7 +71,7 @@ This creates the following three Kubernetes objects for the backend API: [Servic
 
 ***Deployment*** - The deployment for the backend API defines the number of replicas as well as the pod configuration.
 
-[`web_app_ui.yaml`] (web_app_api.yaml) 
+[`web_app_ui.yaml`](web_app_ui.yaml) 
 
 This creates the following two Kubernetes objects for the frontend UI: [Service](https://kubernetes.io/docs/concepts/services-networking/service/) and [Deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/).
 
