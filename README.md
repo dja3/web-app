@@ -105,7 +105,7 @@ service/web-app-ui created
 deployment.apps/web-app-ui created
 ```
 
-Depending on your cloud provider it will take a few minutes for the `EXTERNAL-IP` to be assigned. Once it's been assigned you'll be able to hit the UI on http://<EXTERNAL-IP>:80. 
+Depending on your cloud provider it will take a few minutes for the `EXTERNAL-IP` to be assigned. Once it's been assigned you'll be able to access the UI on http://EXTERNAL-IP:80. 
 
 ```bash
 $ kubectl get services -n web-app
